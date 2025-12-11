@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+  <title>DevJobs - Empleos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Busca el trabajo de tus sueños en DevJobs.">
+  <link rel="stylesheet" href="styles.css">
+
+  <script type="module">
+    import React from 'https://esm.sh/react?dev'
+    import ReactDOM from 'https://esm.sh/react-dom/client?dev'
+
+    window.React = React
+    window.ReactDOM = ReactDOM
+  </script>
+
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+  /*const titulo = React.createElement(
+      'h1',
+      { style: { color: '#09f' } },
+      'Hola, React en DevJobs!'
+    ) */
+
+    // Elemento de React usando JSX
+/* const titulo = <h1 style={{ color: '#09f' }}>Hola, bienvenido a React.js</h1> */
+
+    // Componente de React
+/*  function Saludo({ nombre, color}){
+      return <h2 style={{ color: color }}>¡Hola {nombre}!</h2>
+    } */
+
+    // Componente job card
+    function JobCard({ data, titulo, empresa, ubicacion, descripcion }) {
+
+      const [isApplied, setIsApplied] = React.useState(false)
+
+      function handleClick() {
+        setIsApplied(!isApplied)
+      }
+
+      const textButton = isApplied ? 'Aplicado' : 'Aplicar'
+      const buttonClass = isApplied ? 'btn-apply-job' : ''
+
+      return (
+        <article
+          className="job-description-card"
+          data-job={data?.location}
+          data-technology={data?.technology}
+          data-experience={data?.experiencia}
+        >
+          <div>
+            <h3>{titulo}</h3>
+            <small>{empresa} | {ubicacion}</small>
+            <p>{descripcion}</p>
+          </div>
+          <button
+            className={`btn-apply-job ${buttonClass}`}
+            disabled={isApplied}
+            onClick={handleClick}
+          >
+            {textButton}
+          </button>
+        </article>
+      )
+    }
+
+    function App() {
+      return (
+        <div className="job-listings">
+          <h1>Empleos disponibles en DevJobs</h1>
+          <JobCard
+            titulo="Desarrollador Frontend"
+            empresa="Tech Solutions"
+            ubicacion="Remoto"
+            descripcion="Buscamos un desarrollador frontend con experiencia en React.js y CSS."
+            data={{ location: 'remoto', technology: 'react', experiencia: 'junior' }}
+          />
+          <JobCard
+            titulo="Ingeniero de Software"
+            empresa="Innovatech"
+            ubicacion="Ciudad de México"
+            descripcion="Únete a nuestro equipo como ingeniero de software y trabaja en proyectos innovadores."
+          />
+          <JobCard
+            titulo="Diseñador UX/UI"
+            empresa="Creative Minds"
+            ubicacion="Remoto"
+            descripcion="Estamos buscando un diseñador UX/UI talentoso para mejorar la experiencia de nuestros usuarios."
+          />
+        </div>
+      )
+    }
+
+    const rootElement = document.getElementById('root')
+    const root = ReactDOM.createRoot(rootElement)
+    root.render(<App />)
+  </script>
+</head>
+
+<body>
+  <header>
+    <a href="index.html">
+      <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="16 18 22 12 16 6"></polyline>
+        <polyline points="8 6 2 12 8 18"></polyline>
+      </svg>
+      DevJobs
+    </a>
+
+    <nav>
+      <a href="#">Buscar</a>
+      <a href="jobs.html">Empleos</a>
+      <a href="#">Empresas</a>
+      <a href="#">Salarios</a>
+    </nav>
+
+    <div>
+      <devjobs-avatar service="x" username="anonymous" size="32">
+      </devjobs-avatar>
+    </div>
+  </header>
+
+  <main class="jobs">
+    <section>
+      <h1>React.js - primeros pasos</h1>
+    </section>
+    <section>
+      <h2>Empleos disponibles</h2>
+      <div id="root"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>&copy; 2024 DevJobs. Todos los derechos reservados.</small>
+  </footer>
+</body>
+</html>

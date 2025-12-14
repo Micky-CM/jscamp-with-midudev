@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function JobCard({ data, titulo, empresa, ubicacion, descripcion }) {
+function JobCard({ job }) {
 
   const [isApplied, setIsApplied] = useState(false)
 
@@ -14,14 +14,14 @@ function JobCard({ data, titulo, empresa, ubicacion, descripcion }) {
   return (
     <article
       className="job-description-card"
-      data-job={data?.location}
-      data-technology={data?.technology}
-      data-experience={data?.experiencia}
+      data-job={job.data?.location}
+      data-technology={job.data?.technology}
+      data-experience={job.data?.experiencia}
     >
       <div>
-        <h3>{titulo}</h3>
-        <small>{empresa} | {ubicacion}</small>
-        <p>{descripcion}</p>
+        <h3>{job.titulo}</h3>
+        <small>{job.empresa} | {job.ubicacion}</small>
+        <p>{job.descripcion}</p>
       </div>
       <button
         className={`btn-apply-job ${buttonClass}`}

@@ -8,7 +8,7 @@ function JobsSearchSection( { onTextFilter, onSearch } ) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const formData = new FormData(event.target)
+    const formData = new FormData(event.currentTarget)
 
     const filters = {
       search: formData.get(idText),
@@ -29,7 +29,7 @@ function JobsSearchSection( { onTextFilter, onSearch } ) {
       <h1>Encuentra tu próximo trabajo</h1>
       <p>Explora miles de oportunidades en el sector tecnológico.</p>
 
-      <form onSubmit={handleSubmit} role="search">
+      <form onChange={handleSubmit} role="search">
         <div className="search-input">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
 
@@ -40,13 +40,12 @@ function JobsSearchSection( { onTextFilter, onSearch } ) {
             placeholder="Buscar empleos por título, tecnología o empresa"
             onChange={handleTextChange}
           />
-
-          <button type="submit">Buscar</button>
         </div>
 
         <div className="search-filters">
           <select name={idTechnology} id="filter-technology">
             <option value="">Tecnología</option>
+            <option value="mobile">Mobile</option>
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
             <option value="react">React</option>
@@ -65,7 +64,7 @@ function JobsSearchSection( { onTextFilter, onSearch } ) {
           <select name={idExperience} id="filter-experience">
             <option value="">Nivel de experiencia</option>
             <option value="junior">Junior</option>
-            <option value="mid">Mid-level</option>
+            <option value="mid-level">Mid-level</option>
             <option value="senior">Senior</option>
           </select>
         </div>

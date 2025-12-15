@@ -1,52 +1,35 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Navbar from "./components/Navbar.jsx"
-import JobsSearchSection from "./components/JobsSearchSection.jsx"
-import jobsData from '../data.json'
-import SearchResultsSection from "./components/SearchResultsSection.jsx"
 import Footer from "./components/Footer.jsx"
+import HomePage from "./pages/Home.jsx"
+import SearchPage from "./pages/Search.jsx"
+import NotFoundPage from "./pages/NotFoundPage.jsx"
 
 function App() {
-  const [textToFilter, setTextToFilter] = useState('')
-  const [filters, setFilters] = useState({})
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPath, setCurrentPath] = useState(window.location.pathname)
 
-  const handleSearch = (filters) => {
-    setFilters(filters)
-    setCurrentPage(1)
+  let page = <NotFoundPage />
+  if (currentPath === "/") {
+    page = <HomePage />
+  } else if (currentPath === "/search") {
+    page = <SearchPage />
   }
 
-  const handleTextFilter = (newTextToFilter) => {
-    setTextToFilter(newTextToFilter)
-    setCurrentPage(1)
-  }
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname)
+    }
+    window.addEventListener("popstate", handleLocationChange)
 
-  const filteredJobs = jobsData.filter(job => {
-    // Text filter
-    if (textToFilter &&
-        !job.titulo.toLowerCase().includes(textToFilter.toLowerCase()) &&
-        !job.empresa.toLowerCase().includes(textToFilter.toLowerCase()) &&
-        !job.descripcion.toLowerCase().includes(textToFilter.toLowerCase())) {
-      return false
+    return () => {
+      window.removeEventListener("popstate", handleLocationChange)
     }
-    // Technology filter
-    if (filters.technology) {
-      const tech = Array.isArray(job.data.technology) ? job.data.technology : [job.data.technology]
-      if (!tech.includes(filters.technology)) return false
-    }
-    // Location filter
-    if (filters.location && job.data.location !== filters.location) return false
-    // Experience filter
-    if (filters.experience && job.data.experience !== filters.experience) return false
-    return true
-  })
+  },[])
 
   return (
     <>
       <Navbar />
-      <main className="jobs">
-        <JobsSearchSection onSearch={handleSearch} onTextFilter={handleTextFilter} />
-        <SearchResultsSection jobs={filteredJobs} currentPage={currentPage} onPageChange={setCurrentPage} />
-      </main>
+      {page}
       <Footer />
     </>
   )

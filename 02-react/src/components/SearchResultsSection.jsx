@@ -1,11 +1,9 @@
-import { useState } from 'react'
 import JobCard from './JobCard.jsx'
 import Pagination from './Pagination.jsx'
 
 const RESULTS_PER_PAGE = 4
 
-function SearchResultsSection({ jobs }) {
-  const [currentPage, setCurrentPage] = useState(1)
+function SearchResultsSection({ jobs, currentPage, onPageChange }) {
   const totalPages = Math.ceil(jobs.length / RESULTS_PER_PAGE)
 
   const pageResults = jobs.slice(
@@ -14,7 +12,7 @@ function SearchResultsSection({ jobs }) {
   )
 
   const handlePageChange = (page) => {
-    setCurrentPage(page)
+    onPageChange(page)
   }
   return (
     <section>

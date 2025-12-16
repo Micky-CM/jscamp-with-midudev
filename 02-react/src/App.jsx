@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useRouter } from "./hooks/useRouter.jsx"
 import Navbar from "./components/Navbar.jsx"
 import Footer from "./components/Footer.jsx"
 import HomePage from "./pages/Home.jsx"
@@ -6,7 +6,7 @@ import SearchPage from "./pages/Search.jsx"
 import NotFoundPage from "./pages/NotFoundPage.jsx"
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname)
+  const { currentPath } = useRouter()
 
   let page = <NotFoundPage />
   if (currentPath === "/") {
@@ -15,16 +15,6 @@ function App() {
     page = <SearchPage />
   }
 
-  useEffect(() => {
-    const handleLocationChange = () => {
-      setCurrentPath(window.location.pathname)
-    }
-    window.addEventListener("popstate", handleLocationChange)
-
-    return () => {
-      window.removeEventListener("popstate", handleLocationChange)
-    }
-  },[])
 
   return (
     <>

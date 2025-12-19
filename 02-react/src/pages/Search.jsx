@@ -87,6 +87,7 @@ export function SearchPage() {
   const {
     loading,
     jobs,
+    total,
     totalPages,
     currentPage,
     setCurrentPage,
@@ -95,8 +96,14 @@ export function SearchPage() {
     handleClearFilters
   } = useFilters()
 
+  const title = loading
+    ? `Cargando...`
+    : `Resultados: ${total}, Página ${currentPage} - DevJobs`
+
   return (
     <>
+      <title>{title}</title>
+      <meta name="description" content="Explora miles de oportunidades laborales en el sector tecnológico. Encuentra tu próximo empleo en DevJobs." />
       <main className="jobs">
         <JobsSearchSection onSearch={handleSearch} onTextFilter={handleTextFilter} handleClearFilters={handleClearFilters} />
         {

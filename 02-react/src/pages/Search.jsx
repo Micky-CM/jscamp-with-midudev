@@ -1,12 +1,55 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import JobsSearchSection from "../components/JobsSearchSection.jsx"
-import jobsData from '../../data.json'
 import SearchResultsSection from "../components/SearchResultsSection.jsx"
 
-export function SearchPage() {
+const RESULTS_PER_PAGE = 4
+
+const useFilters = () => {
+  const [filters, setFilters] = useState({
+    technology: '',
+    location: '',
+    experience: ''
+  })
   const [textToFilter, setTextToFilter] = useState('')
-  const [filters, setFilters] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
+
+  const [jobs, setJobs] = useState([])
+  const [total, setTotal] = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchJobs() {
+      try {
+        setLoading(true)
+
+        const params = new URLSearchParams()
+        if (textToFilter) params.append('text', textToFilter)
+        if (filters.technology) params.append('technology', filters.technology)
+        if (filters.location) params.append('type', filters.location)
+        if (filters.experience) params.append('level', filters.experience)
+
+        const offset = (currentPage - 1) * RESULTS_PER_PAGE
+        params.append('limit', RESULTS_PER_PAGE)
+        params.append('offset', offset)
+
+        const queryParams = params.toString() ? `?${params.toString()}` : ''
+
+        const response = await fetch(`https://jscamp-api.vercel.app/api/jobs${queryParams}`)
+        const json = await response.json()
+
+        setJobs(json.data)
+        setTotal(json.total)
+      } catch (error) {
+        console.error('Error fetching jobs:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchJobs()
+  }, [filters, textToFilter, currentPage])
+
+  const totalPages = Math.ceil(total / RESULTS_PER_PAGE)
 
   const handleSearch = (filters) => {
     setFilters(filters)
@@ -18,31 +61,37 @@ export function SearchPage() {
     setCurrentPage(1)
   }
 
-  const filteredJobs = jobsData.filter(job => {
-    // Text filter
-    if (textToFilter &&
-        !job.titulo.toLowerCase().includes(textToFilter.toLowerCase()) &&
-        !job.empresa.toLowerCase().includes(textToFilter.toLowerCase()) &&
-        !job.descripcion.toLowerCase().includes(textToFilter.toLowerCase())) {
-      return false
-    }
-    // Technology filter
-    if (filters.technology) {
-      const tech = Array.isArray(job.data.technology) ? job.data.technology : [job.data.technology]
-      if (!tech.includes(filters.technology)) return false
-    }
-    // Location filter
-    if (filters.location && job.data.location !== filters.location) return false
-    // Experience filter
-    if (filters.experience && job.data.experience !== filters.experience)   return false
-    return true
-  })
+  return {
+    jobs,
+    total,
+    totalPages,
+    loading,
+    handleSearch,
+    handleTextFilter,
+    currentPage,
+    setCurrentPage
+  }
+}
+export function SearchPage() {
+  const {
+    loading,
+    jobs,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    handleSearch,
+    handleTextFilter,
+  } = useFilters()
 
   return (
     <>
       <main className="jobs">
         <JobsSearchSection onSearch={handleSearch} onTextFilter={handleTextFilter} />
-        <SearchResultsSection jobs={filteredJobs} currentPage={currentPage} onPageChange={setCurrentPage} />
+        {
+          loading
+            ? <p>Cargando empleos...</p>
+            : <SearchResultsSection jobs={jobs} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        }
       </main>
     </>
   )

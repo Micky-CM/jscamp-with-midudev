@@ -1,10 +1,9 @@
-import { useId, useState } from "react"
-
-let timeoutId = null
+import { useId, useState, useRef } from "react"
 
 const useSearchForm = ({ idText, idTechnology, idLocation, idExperience, onSearch, onTextFilter }) => {
+  const timeoutId = useRef(null) // Referencia para almacenar el ID del timeout, qye persiste entre renderisados
   const [searchText, setSearchText] = useState('')
-
+  
   const handleSubmit = (event) => {
   event.preventDefault()
   const formData = new FormData(event.currentTarget)
@@ -27,11 +26,11 @@ const useSearchForm = ({ idText, idTechnology, idLocation, idExperience, onSearc
     setSearchText(text) // Actualiza el input inmediatamente
 
     // Debounce: Cancelar el timeout anterior
-    if (timeoutId) {
-      clearTimeout(timeoutId)
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current)
     }
     // Configurar un nuevo timeout
-    timeoutId = setTimeout(() => {
+    timeoutId.current = setTimeout(() => {
       onTextFilter(text)
     }, 500) // Espera 500ms después de que el usuario deja de escribir
   }

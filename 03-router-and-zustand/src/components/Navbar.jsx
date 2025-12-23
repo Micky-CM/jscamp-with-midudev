@@ -1,6 +1,7 @@
+import { NavLink } from "react-router"
 import { Link } from "./Link.jsx"
 
-function Navbar() {
+export function Navbar() {
   return (
     <header>
       <Link href="/">
@@ -14,12 +15,14 @@ function Navbar() {
 
       <nav>
         <a href="#">Buscar</a>
-        <Link href="/search">Empleos</Link>
+        <NavLink
+          className={({ isActive }) => isActive ? 'nav-link-active' : ''}
+          to="/search">
+            Empleos
+        </NavLink>
         <a href="#">Empresas</a>
         <a href="#">Salarios</a>
       </nav>
     </header>
   )
 }
-
-export default Navbar

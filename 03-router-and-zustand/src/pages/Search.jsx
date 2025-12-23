@@ -26,8 +26,6 @@ const useFilters = () => {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
 
-  const {navigateTo} = useRouter()
-
   const handleClearFilters = () => {
     setFilters({
       technology: '',
@@ -108,7 +106,7 @@ const useFilters = () => {
   }
 }
 
-export function SearchPage() {
+export default function SearchPage() {
   const {
     loading,
     jobs,
@@ -147,5 +145,3 @@ export function SearchPage() {
     </>
   )
 }
-
-export default SearchPage

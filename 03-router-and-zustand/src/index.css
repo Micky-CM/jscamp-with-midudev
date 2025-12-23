@@ -591,6 +591,7 @@ footer {
 }
 
 .nav-link-active {
-  color: yellow;
+  text-decoration: underline;
+  opacity: .5;
   pointer-events: none;
 }

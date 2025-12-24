@@ -1,4 +1,6 @@
 import { NavLink } from "react-router"
+import { useContext } from "react"
+import { AuthContext } from "../context/AuthContext.jsx"
 import { Link } from "./Link.jsx"
 
 export function Navbar() {
@@ -23,6 +25,15 @@ export function Navbar() {
         <a href="#">Empresas</a>
         <a href="#">Salarios</a>
       </nav>
+      <NavbarUserButton />
     </header>
   )
+}
+
+const NavbarUserButton = () => {
+  const { isLoggedIn, login, logout } = useContext(AuthContext)
+
+  return isLoggedIn
+    ? <button onClick={logout}>Cerrar sesión</button>
+    : <button onClick={login}>Iniciar sesión</button>
 }

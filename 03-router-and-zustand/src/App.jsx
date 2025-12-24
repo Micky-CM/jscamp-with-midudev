@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react"
 import { Route, Routes } from "react-router"
 
-import Navbar from "./components/Navbar.jsx"
-import Footer from "./components/Footer.jsx"
+import { Navbar } from "./components/Navbar.jsx"
+import  { Footer } from "./components/Footer.jsx"
 
 const LazyHomePage = lazy(() => import("./pages/Home.jsx"))
 const LazySearchPage = lazy(() => import("./pages/Search.jsx"))

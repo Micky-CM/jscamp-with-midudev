@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router"
 import JobsSearchSection from "../components/JobsSearchSection.jsx"
 import SearchResultsSection from "../components/SearchResultsSection.jsx"
-import { useRouter } from "../hooks/useRouter.jsx"
 
 const RESULTS_PER_PAGE = 4
 

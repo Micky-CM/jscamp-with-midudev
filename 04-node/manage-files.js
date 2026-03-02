@@ -17,11 +17,14 @@ await mkdir(outputDir, { recursive: true })
 const uppercaseContent = content.toUpperCase()
 const outputFilePath = join(outputDir, 'archivo-uppercase.txt')
 
-console.log('La extensión es: ', extname(outputFilePath))
-console.log('El nombre del archivo es: ', basename(outputFilePath))
+console.log('La extensión es: ', extname(outputFilePath)) // .txt
+console.log('El nombre del archivo es: ', basename(outputFilePath)) //archivo-uppercase.txt
 
 await writeFile(outputFilePath, uppercaseContent)
 console.log('Archivo creado con contenido en mayúsculas')
 } else {
   console.log('No tienes permiso para escribir en el directorio especificado.')
 }
+
+// Para dar permisos a un archivo o directorio, puedes usar el siguiente comando en la terminal:
+// node --allow-fs-read=archivo.txt --allow-fs-write=output/* manage-files.js

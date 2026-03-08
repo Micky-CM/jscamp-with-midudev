@@ -1,4 +1,6 @@
 import { createServer } from 'node:http'
+import { randomUUID } from 'node:crypto'
+import { json } from 'node:stream/consumers'
 
 process.loadEnvFile() // Carga las variables de entorno desde el archivo .env
 
@@ -13,18 +15,55 @@ function sendJson(res, statusCode, data) {
   res.end(JSON.stringify(data))
 }
 
-const server = createServer((req, res) => {
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Midu' }
+]
 
-  if (req.url === '/') {
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-    return res.end('Hola desde Node.js 🦖')
+const server = createServer(async (req, res) => {
+  const { method, url } = req
+  const [pathname, querystring] = url.split('?')
+
+  const searchParams = new URLSearchParams(querystring)
+
+  if (method === 'GET') {
+    if (url === '/') {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+      return res.end('Hola desde Node.js 🦖')
+    }
+
+    if (pathname === '/users') {
+      const limit = Number(searchParams.get('limit')) || users.length
+      const offset = Number(searchParams.get('offset')) || 0
+
+      const paginatedUsers = users.slice(offset, offset + limit)
+
+      return sendJson(res, 200, paginatedUsers)
+    }
+
+    if (url === '/health') {
+      return sendJson(res, 200, { status: 'OK', uptime: process.uptime() })
+    }
   }
 
-  if (req.url === '/users') {
-    return sendJson(res, 200, [
-      { id: 1, name: 'Alice' },
-      { id: 2, name: 'Bob' },
-    ])
+  if (method === 'POST') {
+    if (url === '/users') {
+      const body = await json(req)
+
+      if (!body || !body.name) {
+        return sendJson(res, 400, { error: 'Name is required' })
+      }
+
+      const newUser = {
+        id: randomUUID(),
+        name: body.name
+      }
+
+      users.push(newUser)
+
+      return sendJson(res, 201, { message: 'User created'})
+    }
   }
 
   return sendJson(res, 404, { error: 'Not found' })

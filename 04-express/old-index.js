@@ -22,8 +22,6 @@ app.get('/health', (req, res) => {
   })
 })
 
-// CRUD: Create, Read, Update, Delete
-
 // Arquitectura RESTful API
 // GET /jobs -> Obtener un recurso o una colección de recursos
 app.get('/jobs', async(req, res) => {
@@ -65,31 +63,13 @@ app.get('/jobs', async(req, res) => {
 app.get('/job/:id', (req, res) => {
   const { id } = req.params
 
-  const job = jobs.find(job => job.id === id)
-
-  if (!job) {
-    return res.status(404).json({ message: 'Recurso no encontrado' })
-  }
-
-  return res.json(job)
+  return res.json(jobs.find(job => job.id === id))
 })
 
 // POST /job -> Crear un nuevo recurso
 app.post('/job', (req, res) => {
-  /const { titulo, descripcion, ubicacion, data } = req.body
-
-  const newJob = {
-    id: crypto.randomUUID(),
-    titulo,
-    descripcion,
-    empresa,
-    ubicacion,
-    data,
-  }
-
-  jobs.push(newJob)
-
-  return res.status(201).json(newJob)
+  // Lógica para crear un nuevo recurso
+  return res.json({ message: 'Recurso creado' })
 })
 
 // PUT /job/:id -> Reemplazar un recurso completo por su ID
@@ -108,6 +88,27 @@ app.patch('/job/:id', (req, res) => {
 app.delete('/job/:id', (req, res) => {
   // Lógica para eliminar un recurso existente
   return res.json({ message: 'Recurso eliminado' })
+})
+
+// Otras formas de definir rutas
+// Opcional -> /acd o /abcd
+app.get('/a{b}cd', (req, res) => {
+  return res.send('abcd o acd')
+})
+
+// Comodín
+app.get('/bb*bb', (req, res) => {
+  return res.send('bb*bb')
+})
+
+// Rutas más largas que no sabes como terminan
+app.get('/file/*filename', (req, res) => {
+  return res.send('file/*')
+})
+
+// Usar Regex
+app.get(/.*fly$/, (req, res) => {
+  return res.send('Terminando en fly')
 })
 
 app.listen(PORT, () => {
